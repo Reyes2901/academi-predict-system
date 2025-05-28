@@ -8,7 +8,6 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-  SidebarProvider,
 } from "@/components/ui/sidebar"
 import { 
   LayoutDashboard, 
@@ -20,9 +19,12 @@ import {
   BarChart3, 
   User,
   School,
-  Settings
+  Settings,
+  LogOut
 } from "lucide-react"
-import { useLocation } from "react-router-dom"
+import { useLocation, useNavigate } from "react-router-dom"
+import { useAuth } from "../context/AuthContext"
+import { Button } from "@/components/ui/button"
 
 const items = [
   {
@@ -89,15 +91,20 @@ const items = [
 
 export function AppSidebar() {
   const location = useLocation()
-  // Simulating user role - in real app this would come from auth context
-  const userRole = "PROFESOR" // This should come from your auth system
+  const navigate = useNavigate()
+  const { user, logout } = useAuth()
   
   const filteredItems = items.filter(item => {
-    if (userRole === "PROFESOR" || userRole === "ADMINISTRATIVO") {
-      return item.roles.includes(userRole)
+    if (user && (user.rol === "PROFESOR" || user.rol === "ADMINISTRATIVO")) {
+      return item.roles.includes(user.rol)
     }
     return false
   })
+
+  const handleLogout = () => {
+    logout()
+    navigate('/login')
+  }
 
   return (
     <Sidebar>
@@ -106,6 +113,14 @@ export function AppSidebar() {
           <SidebarGroupLabel className="text-lg font-semibold text-blue-600 mb-4">
             Aula Inteligente
           </SidebarGroupLabel>
+          {user && (
+            <div className="px-2 py-3 mb-4 bg-blue-50 rounded-lg">
+              <div className="text-sm font-medium text-blue-900">
+                {user.first_name} {user.last_name}
+              </div>
+              <div className="text-xs text-blue-600">{user.rol}</div>
+            </div>
+          )}
           <SidebarGroupContent>
             <SidebarMenu>
               {filteredItems.map((item) => (
@@ -122,6 +137,16 @@ export function AppSidebar() {
                   </SidebarMenuButton>
                 </SidebarMenuItem>
               ))}
+              <SidebarMenuItem>
+                <Button
+                  variant="ghost"
+                  onClick={handleLogout}
+                  className="w-full justify-start text-red-600 hover:text-red-700 hover:bg-red-50"
+                >
+                  <LogOut className="w-4 h-4 mr-2" />
+                  Cerrar Sesión
+                </Button>
+              </SidebarMenuItem>
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>

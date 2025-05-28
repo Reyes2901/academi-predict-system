@@ -1,9 +1,13 @@
+
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { AuthProvider } from "./context/AuthContext";
+import ProtectedRoute from "./components/ProtectedRoute";
 import Layout from "./components/Layout";
+import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
 import Students from "./pages/Students";
 import StudentDetail from "./pages/StudentDetail";
@@ -14,31 +18,105 @@ import Participations from "./pages/Participations";
 import Reports from "./pages/Reports";
 import NotFound from "./pages/NotFound";
 
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      retry: 1,
+      refetchOnWindowFocus: false,
+    },
+  },
+});
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <TooltipProvider>
       <Toaster />
       <Sonner />
-      <BrowserRouter>
-        <Layout>
+      <AuthProvider>
+        <BrowserRouter>
           <Routes>
-            <Route path="/" element={<Dashboard />} />
-            <Route path="/students" element={<Students />} />
-            <Route path="/student/:id" element={<StudentDetail />} />
-            <Route path="/subjects" element={<Subjects />} />
-            <Route path="/attendance" element={<Attendance />} />
-            <Route path="/grades" element={<Grades />} />
-            <Route path="/participations" element={<Participations />} />
-            <Route path="/reports" element={<Reports />} />
-            <Route path="/users" element={<div className="p-8 text-center text-gray-500">Gestión de Usuarios - En desarrollo</div>} />
-            <Route path="/courses" element={<div className="p-8 text-center text-gray-500">Gestión de Cursos - En desarrollo</div>} />
-            <Route path="/settings" element={<div className="p-8 text-center text-gray-500">Configuración - En desarrollo</div>} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/" element={
+              <ProtectedRoute requiredRoles={['PROFESOR', 'ADMINISTRATIVO']}>
+                <Layout>
+                  <Dashboard />
+                </Layout>
+              </ProtectedRoute>
+            } />
+            <Route path="/students" element={
+              <ProtectedRoute requiredRoles={['PROFESOR', 'ADMINISTRATIVO']}>
+                <Layout>
+                  <Students />
+                </Layout>
+              </ProtectedRoute>
+            } />
+            <Route path="/student/:id" element={
+              <ProtectedRoute requiredRoles={['PROFESOR', 'ADMINISTRATIVO']}>
+                <Layout>
+                  <StudentDetail />
+                </Layout>
+              </ProtectedRoute>
+            } />
+            <Route path="/subjects" element={
+              <ProtectedRoute requiredRoles={['PROFESOR', 'ADMINISTRATIVO']}>
+                <Layout>
+                  <Subjects />
+                </Layout>
+              </ProtectedRoute>
+            } />
+            <Route path="/attendance" element={
+              <ProtectedRoute requiredRoles={['PROFESOR', 'ADMINISTRATIVO']}>
+                <Layout>
+                  <Attendance />
+                </Layout>
+              </ProtectedRoute>
+            } />
+            <Route path="/grades" element={
+              <ProtectedRoute requiredRoles={['PROFESOR', 'ADMINISTRATIVO']}>
+                <Layout>
+                  <Grades />
+                </Layout>
+              </ProtectedRoute>
+            } />
+            <Route path="/participations" element={
+              <ProtectedRoute requiredRoles={['PROFESOR', 'ADMINISTRATIVO']}>
+                <Layout>
+                  <Participations />
+                </Layout>
+              </ProtectedRoute>
+            } />
+            <Route path="/reports" element={
+              <ProtectedRoute requiredRoles={['PROFESOR', 'ADMINISTRATIVO']}>
+                <Layout>
+                  <Reports />
+                </Layout>
+              </ProtectedRoute>
+            } />
+            <Route path="/users" element={
+              <ProtectedRoute requiredRoles={['ADMINISTRATIVO']}>
+                <Layout>
+                  <div className="p-8 text-center text-gray-500">Gestión de Usuarios - En desarrollo</div>
+                </Layout>
+              </ProtectedRoute>
+            } />
+            <Route path="/courses" element={
+              <ProtectedRoute requiredRoles={['ADMINISTRATIVO']}>
+                <Layout>
+                  <div className="p-8 text-center text-gray-500">Gestión de Cursos - En desarrollo</div>
+                </Layout>
+              </ProtectedRoute>
+            } />
+            <Route path="/settings" element={
+              <ProtectedRoute requiredRoles={['ADMINISTRATIVO']}>
+                <Layout>
+                  <div className="p-8 text-center text-gray-500">Configuración - En desarrollo</div>
+                </Layout>
+              </ProtectedRoute>
+            } />
             <Route path="*" element={<NotFound />} />
           </Routes>
-        </Layout>
-      </BrowserRouter>
+        </BrowserRouter>
+      </AuthProvider>
     </TooltipProvider>
   </QueryClientProvider>
 );
