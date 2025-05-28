@@ -25,7 +25,12 @@ const App = () => (
             <Route path="/student/:id" element={<StudentDetail />} />
             <Route path="/subjects" element={<div className="p-8 text-center text-gray-500">Página de Materias - En desarrollo</div>} />
             <Route path="/attendance" element={<div className="p-8 text-center text-gray-500">Página de Asistencia - En desarrollo</div>} />
-            {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+            <Route path="/grades" element={<div className="p-8 text-center text-gray-500">Página de Notas - En desarrollo</div>} />
+            <Route path="/participations" element={<div className="p-8 text-center text-gray-500">Página de Participaciones - En desarrollo</div>} />
+            <Route path="/reports" element={<div className="p-8 text-center text-gray-500">Página de Reportes - En desarrollo</div>} />
+            <Route path="/users" element={<div className="p-8 text-center text-gray-500">Gestión de Usuarios - En desarrollo</div>} />
+            <Route path="/courses" element={<div className="p-8 text-center text-gray-500">Gestión de Cursos - En desarrollo</div>} />
+            <Route path="/settings" element={<div className="p-8 text-center text-gray-500">Configuración - En desarrollo</div>} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </Layout>
