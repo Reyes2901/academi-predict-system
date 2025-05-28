@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -6,7 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
-import { MessageSquare, Star, HandRaised, Target, Plus } from "lucide-react";
+import { MessageSquare, Star, Hand, Target, Plus } from "lucide-react";
 
 interface Participation {
   id: string;
@@ -75,7 +74,7 @@ export default function Participations() {
   const getTypeIcon = (type: string) => {
     switch (type) {
       case "voluntaria":
-        return <HandRaised className="w-4 h-4 text-green-600" />;
+        return <Hand className="w-4 h-4 text-green-600" />;
       case "solicitada":
         return <MessageSquare className="w-4 h-4 text-blue-600" />;
       case "ejercicio":
@@ -142,7 +141,7 @@ export default function Participations() {
           </CardHeader>
           <CardContent>
             <div className="flex items-center gap-2">
-              <HandRaised className="w-5 h-5 text-green-600" />
+              <Hand className="w-5 h-5 text-green-600" />
               <div className="text-2xl font-bold text-green-600">{voluntaryCount}</div>
             </div>
           </CardContent>
